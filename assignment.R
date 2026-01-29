@@ -51,7 +51,11 @@ km.out <- kmeans(scale(friends_tf_wide), centers = 3, nstart = 20)
 
 # 6. примените к матрице метод главных компонент (prcomp)
 # центрируйте и стандартизируйте, использовав аргументы функции
-pca_fit <- prcomp(scale(friends_tf_wide), center = FALSE, scale. = FALSE)
+pca_fit <- prcomp(
+  friends_tf_wide[, sort(colnames(friends_tf_wide))],
+  center = TRUE,
+  scale. = TRUE
+)
 
 
 # 7. биплот: текст, цвет = кластер, 20 переменных по cos2
