@@ -36,7 +36,12 @@ friends_tf <- friends_tokens |>
 # 4. преобразуйте в широкий формат; 
 # столбец c именем спикера превратите в имя ряда, используя подходящую функцию 
 friends_tf_wide <- friends_tf |> 
-  pivot_wider(names_from = word, values_from = tf, values_fill = 0) |>
+  pivot_wider(
+    names_from = word, 
+    values_from = tf, 
+    values_fill = 0,
+    names_sort = TRUE
+  ) |>
   tibble::column_to_rownames("speaker")
 
 # 5. установите зерно 123
@@ -60,6 +65,6 @@ q <- fviz_pca_biplot(
   geom = "text",
   habillage = as.factor(km.out$cluster),
   select.var = list(cos2 = 20),
-  repel = TRUE
+  repel = FALSE
 ) +
   theme_minimal()
