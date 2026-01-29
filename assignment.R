@@ -25,17 +25,8 @@ friends_tokens <- friends |>
 # 3. отберите по 500 самых частотных слов для каждого персонажа
 # посчитайте относительные частотности для слов
 friends_tf <- friends_tokens |>
+  count(speaker, word, sort = TRUE) |>
   group_by(speaker) |>
-  mutate(pos = row_number()) |>
-  ungroup() |>
-  group_by(speaker, word) |>
-  summarise(
-    n = n(),
-    first_pos = min(pos),
-    .groups = "drop"
-  ) |>
-  group_by(speaker) |>
-  arrange(desc(n), first_pos) |>
   slice_head(n = 500) |>
   mutate(tf = n / sum(n)) |>
   ungroup() |>
@@ -44,7 +35,12 @@ friends_tf <- friends_tokens |>
 # 4. преобразуйте в широкий формат; 
 # столбец c именем спикера превратите в имя ряда, используя подходящую функцию 
 friends_tf_wide <- friends_tf |> 
-  pivot_wider(names_from = word, values_from = tf, values_fill = 0) |>
+  pivot_wider(
+    names_from = word, 
+    values_from = tf, 
+    values_fill = 0,
+    names_sort = TRUE
+  ) |>
   tibble::column_to_rownames("speaker")
 
 # 5. установите зерно 123
